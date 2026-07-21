@@ -16,32 +16,72 @@ public class File {
      * Method to code/test
      */
     public File(FileType type, Location location) {
-    	
+        this.type = type;
+        this.location = location;
+        this.content = new ArrayList<>();
     }
 
     /*
      * Method to code/test
      */
-    public void addProperty(char[] content) throws InvalidContentException, WrongFileTypeException {
-    	
+    public void addProperty(char[] content) 
+        throws InvalidContentException, WrongFileTypeException {
 
+    if (content == null) {
+        throw new InvalidContentException();
     }
+
+    if (this.type == FileType.IMAGE) {
+        throw new WrongFileTypeException();
+    }
+
+    String str = new String(content);
+
+    if (!str.contains("=") || str.startsWith("=") || str.endsWith("=")) {
+        throw new InvalidContentException();
+    }
+
+    for (char c : content) {
+        this.content.add(c);
+    }
+}
     
     /*
      * Method to code/test
      */
-    public void addImageBytes(char[] content) throws InvalidContentException, WrongFileTypeException, WrongEncodingException {
-    	
+    public void addImageBytes(char[] content) 
+        throws InvalidContentException, WrongFileTypeException, WrongEncodingException {
 
-    }			
+    if (content == null) {
+        throw new InvalidContentException();
+    }
+
+    if (this.type == FileType.PROPERTY) {
+        throw new WrongFileTypeException();
+    }
+
+    for (char c : content) {
+        if (c > 255) {
+            throw new WrongEncodingException();
+        }
+        this.content.add(c);
+    }
+}		
     
     /*
      * Method to code/test
      */
     public void removeContent(int numberChars) {
-    	
 
+    if (numberChars >= this.content.size()) {
+        this.content.clear();
+        return;
     }
+
+    for (int i = 0; i < numberChars; i++) {
+        this.content.remove(this.content.size() - 1);
+    }
+}
     
     /*
      * getters
